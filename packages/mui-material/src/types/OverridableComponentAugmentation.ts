@@ -30,7 +30,7 @@ declare module '@mui/material/OverridableComponent' {
   > = (
     & BaseProps<TypeMap>
     & DistributiveOmit<React.ComponentPropsWithoutRef<RootComponent>, keyof BaseProps<TypeMap>>
-    & { ref?: (React.Ref<Element>) | undefined }
+    & { ref?: React.ComponentPropsWithRef<RootComponent>['ref'] }
   );
 
   /**
@@ -40,5 +40,5 @@ declare module '@mui/material/OverridableComponent' {
   type DefaultComponentPropsVer2<TypeMap extends OverridableTypeMap> = 
     & BaseProps<TypeMap>
     & DistributiveOmit<React.ComponentPropsWithoutRef<TypeMap['defaultComponent']>, keyof BaseProps<TypeMap>>
-    & { ref?: (React.Ref<Element>) | undefined };
+    & { ref?: React.ComponentPropsWithRef<TypeMap['defaultComponent']>['ref'] };
 }

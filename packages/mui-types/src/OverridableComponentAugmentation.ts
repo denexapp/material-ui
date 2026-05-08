@@ -30,7 +30,7 @@ declare module '@mui/types' {
   > = (
     & BaseProps<M>
     & DistributiveOmit<React.ComponentPropsWithoutRef<C>, keyof BaseProps<M>>
-    & { ref?: (React.Ref<Element>) | undefined }
+    & { ref?: React.ComponentPropsWithRef<C>['ref'] }
   );
 
   /**
@@ -40,5 +40,5 @@ declare module '@mui/types' {
   type DefaultComponentPropsVer2<M extends OverridableTypeMap> =
     & BaseProps<M>
     & DistributiveOmit<React.ComponentPropsWithoutRef<M['defaultComponent']>, keyof BaseProps<M>>
-    & { ref?: (React.Ref<Element>) | undefined };
+    & { ref?: React.ComponentPropsWithRef<M['defaultComponent']>['ref'] };
 }

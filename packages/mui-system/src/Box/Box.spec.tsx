@@ -1,3 +1,5 @@
+import * as React from 'react';
+import { expectType } from '@mui/types';
 import { Box, styled } from '@mui/system';
 
 interface TestProps {
@@ -119,4 +121,47 @@ function StyledBoxWithSx() {
 
 function LogicalPropertiesTest() {
   <Box sx={{ marginInline: 1, paddingBlockEnd: '10px' }} />;
+}
+
+function RefInferenceTest() {
+  const divRef = React.createRef<HTMLDivElement>();
+  <Box ref={divRef} />;
+
+  <Box
+    ref={(node) => {
+      expectType<HTMLDivElement | null, typeof node>(node);
+    }}
+  />;
+
+  <Box
+    component="button"
+    ref={(node) => {
+      expectType<HTMLButtonElement | null, typeof node>(node);
+    }}
+  />;
+
+  <Box
+    component="a"
+    href="#section"
+    ref={(node) => {
+      expectType<HTMLAnchorElement | null, typeof node>(node);
+    }}
+  />;
+}
+
+const ForwardedDiv = React.forwardRef<HTMLDivElement, { test?: string }>(function ForwardedDiv(
+  props,
+  ref,
+) {
+  return <div ref={ref} {...props} />;
+});
+
+function CustomComponentRefInferenceTest() {
+  <Box
+    component={ForwardedDiv}
+    test="ok"
+    ref={(node) => {
+      expectType<HTMLDivElement | null, typeof node>(node);
+    }}
+  />;
 }

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Box as SystemBox, BoxProps as SystemBoxProps, createBox } from '@mui/system';
 import { expectType } from '@mui/types';
 import Box, { BoxProps as MaterialBoxProps } from '@mui/material/Box';
@@ -46,3 +47,32 @@ function ComponentTest() {
 
 expectType<SystemBoxProps['component'], MaterialBoxProps['component']>('span');
 expectType<SystemBoxProps['component'], MaterialBoxProps['component']>(ComponentTest);
+
+function RefInferenceCompatibilityTest() {
+  <Box
+    ref={(node) => {
+      expectType<HTMLDivElement | null, typeof node>(node);
+    }}
+  />;
+
+  <Box
+    component="button"
+    ref={(node) => {
+      expectType<HTMLButtonElement | null, typeof node>(node);
+    }}
+  />;
+}
+
+const ForwardedMaterialDiv = React.forwardRef<HTMLDivElement, { test?: string }>(
+  function ForwardedMaterialDiv(props, ref) {
+    return <div ref={ref} {...props} />;
+  },
+);
+
+<Box
+  component={ForwardedMaterialDiv}
+  test="ok"
+  ref={(node) => {
+    expectType<HTMLDivElement | null, typeof node>(node);
+  }}
+/>;
